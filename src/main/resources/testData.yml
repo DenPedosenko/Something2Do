@@ -1,0 +1,82 @@
+tasks:
+  - task:
+      activity: "Do a Home Workout"
+      accessibility: 0.9
+      type: "Exercise"
+      participants: 1
+      price: 0.0
+      link: "https://example.com/home-workout"
+      key: "123"
+    user: "user1"
+    isCompleted: false
+    isWished: true
+    rating: 4
+  - task:
+      activity: "Read a Book"
+      accessibility: 0.7
+      type: "Reading"
+      participants: 1
+      price: 0.0
+      link: "https://example.com/read-book"
+      key: "456"
+    user: "user1"
+    isCompleted: true
+    isWished: false
+    rating: 5
+  - task:
+      activity: "Cook a Healthy Meal"
+      accessibility: 0.8
+      type: "Cooking"
+      participants: 2
+      price: 10.0
+      link: "https://example.com/cook-meal"
+      key: "789"
+    user: "user1"
+    isCompleted: false
+    isWished: true
+    rating: 3
+
+  - task:
+      activity: "Learn a New Language"
+      accessibility: 0.6
+      type: "Learning"
+      participants: 1
+      price: 0.0
+      link: "https://example.com/learn-language"
+      key: "101"
+    user: "user2"
+    isCompleted: true
+    isWished: false
+    rating: 4
+  - task:
+      activity: "Go for a Run"
+      accessibility: 0.8
+      type: "Exercise"
+      participants: 1
+      price: 0.0
+      link: "https://example.com/go-for-run"
+      key: "202"
+    user: "user2"
+    isCompleted: false
+    isWished: true
+    rating: 2
+  - task:
+      activity: "Write a Journal"
+      accessibility: 0.7
+      type: "Writing"
+      participants: 1
+      price: 0.0
+      link: "https://example.com/write-journal"
+      key: "303"
+    user: "user2"
+    isCompleted: false
+    isWished: true
+    rating: 5
+
+users:
+  - name: "user1"
+    userSettings:
+      isRatingEnabled: true
+  - name: "user2"
+    userSettings:
+      isRatingEnabled: false

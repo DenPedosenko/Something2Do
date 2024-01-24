@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Main Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Logo</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/main">Main</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/wishlist">Wish List</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/completed">Completed</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown ">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <span th:text="${username}"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="#" th:text="${username}"></a>
+                    <div class="dropdown-item">
+                        <form th:action="@{/toggleRatingMode}" method="post" id="ratingForm">
+                            <label for="ratingSwitch">Rating mode</label>
+                            <input type="hidden" name="isRatingEnabled" th:value="${isRatingEnabled}"/>
+                            <input type="checkbox" th:checked="${isRatingEnabled}" id="ratingSwitch"
+                                   th:onclick="'document.getElementById(\'ratingForm\').submit();'"/>
+                        </form>
+                    </div>
+                    <a class="dropdown-item" href="/logout" th:text="#{general.logout}"></a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container text-center mt-4">
+    <div>
+        <p>
+            Time Remaining: <span id="timeRemaining"></span>
+        </p>
+    </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var remainingTime = /*[[${taskOfTheDay.remainingTime}]]*/ '2022-01-22T12:30:00'; // Replace with your actual backend date-time
+        function updateRemainingTime() {
+            let timeRemainingElement = document.getElementById("timeRemaining");
+            if (timeRemainingElement) {
+                let now = new Date();
+                let endTime = new Date(remainingTime);
+                let timeDifference = Math.floor((endTime - now) / 1000);
+
+                if (timeDifference > 0) {
+                    let hours = Math.floor(timeDifference / 3600);
+                    let minutes = Math.floor((timeDifference % 3600) / 60);
+                    let seconds = timeDifference % 60;
+
+                    timeRemainingElement.textContent = hours + "h " + minutes + "m " + seconds + "s";
+                } else {
+                    timeRemainingElement.textContent = "Time Expired";
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                }
+            }
+        }
+
+        setInterval(function () {
+            updateRemainingTime();
+        }, 1000);
+
+        updateRemainingTime();
+        /*]]>*/
+    </script>
+    <div class="card task-card mx-auto">
+        <div class="card-body">
+            <h5 class="card-title">Task of the day</h5>
+            <ul class="list-group list-group-flush text-left">
+                <li class="list-group-item text-left">
+                    <strong>Activity:</strong>
+                    <span th:text="${taskOfTheDay.getTask().activity}"></span>
+                </li>
+                <li class="list-group-item text-left">
+                    <strong>Type:</strong>
+                    <span th:text="${taskOfTheDay.getTask().type}"></span>
+                </li>
+                <li class="list-group-item text-left">
+                    <strong>Participants:</strong>
+                    <span th:text="${taskOfTheDay.getTask().participants}"></span>
+                </li>
+                <li class="list-group-item text-left">
+                    <strong>Price:</strong>
+                    <span th:text="${taskOfTheDay.getTask().price()}"></span>
+                </li>
+                <li class="list-group-item text-left">
+                    <strong>Accessibility:</strong>
+                    <span th:text="${taskOfTheDay.getTask().accessibility()}"></span>
+                </li>
+            </ul>
+            <div th:if="${taskOfTheDay.isCompleted}" class="completed-label">
+                <span class="badge badge-success">Completed</span>
+            </div>
+
+            <!-- Centered row for forms -->
+            <div class="row justify-content-center mt-3">
+                <div class="col-md-4">
+                    <form th:action="@{/markCompleted}" method="post" class="text-center"
+                          th:style="${taskOfTheDay.isCompleted} ? 'display:none' : ''">
+                        <input type="hidden" th:name="taskId" th:value="${taskOfTheDay.getTask().key()}"/>
+                        <button type="submit" class="btn btn-success">Mark as Completed</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <form th:action="@{/retrieveTasks/__${username}__}" method="post" class="text-center">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="taskType">Task Type</label>
+                        </div>
+                        <select class="custom-select" id="taskType" name="taskType">
+                            <option th:each="type : ${types}" th:value="${type}" th:text="${type}"></option>
+                        </select>
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">Retrieve Task</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="text-center" th:if="${param.error}">
+        <p class="alert alert-danger mt-2" th:text="#{tasks.limit_error}"></p>
+    </div>
+    <div class="mt-4">
+        <h3>User Tasks</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Activity</th>
+                <th>Type</th>
+                <th>Participants</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${tasks}">
+                <td th:text="${task.getTask().activity}"></td>
+                <td th:text="${task.getTask().type}"></td>
+                <td th:text="${task.getTask().participants}"></td>
+                <td>
+                    <div class="row justify-content-center mt-3">
+                        <form th:action="@{/markCompleted}" method="post" class="text-center">
+                            <input type="hidden" th:name="taskId" th:value="${task.getTask().key()}"/>
+                            <button type="submit" class="btn btn-success btn-sm ml-2">Complete</button>
+                        </form>
+                        <div class="col-md-4">
+                            <form th:action="@{/markFavorite}" method="post" class="text-center">
+                                <input type="hidden" th:name="taskId" th:value="${task.getTask().key()}"/>
+                                <button type="submit" class="btn btn-warning btn-sm ml-2">Mark as Favorite</button>
+                            </form>
+                        </div>
+                        <form th:action="@{/removeTask}" method="post" class="text-center">
+                            <input type="hidden" th:name="taskId" th:value="${task.getTask().key()}"/>
+                            <button type="submit" class="btn btn-danger btn-sm ml-2">Remove</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</html>

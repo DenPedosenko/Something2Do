@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "external.boredapi.baseURL",
+      "type": "java.lang.String",
+      "description": "Description for external.boredapi.baseURL."
+  }
+] }

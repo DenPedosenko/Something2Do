@@ -1,7 +1,7 @@
 package com.sysaid.assignment.strategy;
 
-import com.sysaid.assignment.domain.Task;
-import com.sysaid.assignment.domain.User;
+import com.sysaid.assignment.domain.model.Task;
+import com.sysaid.assignment.domain.model.User;
 import com.sysaid.assignment.mapper.TaskMapper;
 import com.sysaid.assignment.service.ITaskService;
 import com.sysaid.assignment.service.InternalStorageService;

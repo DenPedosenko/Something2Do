@@ -1,19 +1,16 @@
 package com.sysaid.assignment.controller;
 
-import com.sysaid.assignment.domain.Task;
-import com.sysaid.assignment.domain.TaskDao;
+import com.sysaid.assignment.domain.model.Task;
+import com.sysaid.assignment.domain.model.TaskDao;
 import com.sysaid.assignment.mapper.TaskMapper;
 import com.sysaid.assignment.service.InternalStorageService;
 import com.sysaid.assignment.service.TaskServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +39,12 @@ public class TaskController {
     /**
      * Retrieves uncompleted tasks for a specified user and task type.
      *
-     * @param user   The username for which tasks are retrieved.
-     * @param type   The type of tasks to retrieve.
-     * @param model  The Spring MVC model for adding attributes.
-     * @return       A view name indicating the result of the operation.
-     *               If successful, redirects to the main page with the updated tasks.
-     *               If unsuccessful (e.g., insufficient tasks), redirects to the main page with an error indicator.
+     * @param user  The username for which tasks are retrieved.
+     * @param type  The type of tasks to retrieve.
+     * @param model The Spring MVC model for adding attributes.
+     * @return A view name indicating the result of the operation.
+     * If successful, redirects to the main page with the updated tasks.
+     * If unsuccessful (e.g., insufficient tasks), redirects to the main page with an error indicator.
      */
     @PostMapping("/retrieveTasks/{user}")
     public String getUncompletedTasks(@PathVariable("user") String user, @RequestParam(name = "taskType") String type, Model model) {
@@ -68,11 +65,11 @@ public class TaskController {
      *
      * @param taskId The unique identifier of the task to be marked as completed.
      * @return A view name indicating the result of the operation.
-     *         Redirects to the main page after marking the task as completed.
+     * Redirects to the main page after marking the task as completed.
      */
     @PostMapping("/markCompleted")
-    public String markCompleted(@RequestParam String taskId) {
-        internalStorageService.markTaskAsCompleted(taskId);
+    public String markCompleted(@RequestParam String taskId, @RequestParam String userName) {
+        internalStorageService.markTaskAsCompleted(taskId, userName);
         return "redirect:/main";
     }
 
@@ -81,11 +78,11 @@ public class TaskController {
      *
      * @param taskId The unique identifier of the task to be marked as favorite.
      * @return A view name indicating the result of the operation.
-     *         Redirects to the main page after marking the task as favorite.
+     * Redirects to the main page after marking the task as favorite.
      */
     @PostMapping("/markFavorite")
-    public String markWished(@RequestParam String taskId) {
-        internalStorageService.markTaskAsWished(taskId);
+    public String markWished(@RequestParam String taskId, @RequestParam String userName) {
+        internalStorageService.markTaskAsWished(taskId, userName);
         return "redirect:/main";
     }
 
@@ -94,11 +91,11 @@ public class TaskController {
      *
      * @param taskId The unique identifier of the task to be removed.
      * @return A view name indicating the result of the operation.
-     *         Redirects to the main page after removing the task.
+     * Redirects to the main page after removing the task.
      */
     @PostMapping("/removeTask")
-    public String removeTask(@RequestParam String taskId) {
-        internalStorageService.removeTask(taskId);
+    public String removeTask(@RequestParam String taskId, @RequestParam String userName) {
+        internalStorageService.removeTask(taskId, userName);
         return "redirect:/main";
     }
 }

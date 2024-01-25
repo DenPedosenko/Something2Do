@@ -1,4 +1,4 @@
-package com.sysaid.assignment.domain;
+package com.sysaid.assignment.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

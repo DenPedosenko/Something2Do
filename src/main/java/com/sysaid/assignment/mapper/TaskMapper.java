@@ -1,8 +1,8 @@
 package com.sysaid.assignment.mapper;
 
-import com.sysaid.assignment.domain.Task;
-import com.sysaid.assignment.domain.TaskDao;
-import com.sysaid.assignment.domain.TaskOfTheDay;
+import com.sysaid.assignment.domain.model.Task;
+import com.sysaid.assignment.domain.model.TaskDao;
+import com.sysaid.assignment.domain.model.TaskOfTheDay;
 
 import java.time.LocalDateTime;
 

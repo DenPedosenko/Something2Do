@@ -1,6 +1,6 @@
 package com.sysaid.assignment.repository;
 
-import com.sysaid.assignment.domain.User;
+import com.sysaid.assignment.domain.model.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.SerializationUtils;
 
@@ -10,6 +10,17 @@ import java.util.List;
 @Repository
 public class UserRepository {
     private final List<byte[]> serializedUsers = new ArrayList<>();
+
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        for (byte[] serializedUser : serializedUsers) {
+            User user = (User) SerializationUtils.deserialize(serializedUser);
+            if (user != null) {
+                users.add(user);
+            }
+        }
+        return users;
+    }
 
     public void saveUser(User user) {
         validateUser(user);

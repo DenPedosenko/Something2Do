@@ -1,6 +1,6 @@
 package com.sysaid.assignment.repository;
 
-import com.sysaid.assignment.domain.TaskDao;
+import com.sysaid.assignment.domain.model.TaskDao;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.SerializationUtils;
 
@@ -37,10 +37,10 @@ public class TaskRepository {
         }
     }
 
-    public TaskDao getTaskById(String taskId) {
+    public TaskDao getTaskById(String taskId, String userName) {
         for (byte[] serializedTask : serializedTasks) {
             TaskDao task = (TaskDao) SerializationUtils.deserialize(serializedTask);
-            if (task != null && task.getTask().key().equals(taskId)) {
+            if (task != null && task.getTask().key().equals(taskId) && task.getUser().equals(userName)) {
                 return task;
             }
         }

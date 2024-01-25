@@ -1,17 +1,11 @@
 package com.sysaid.assignment.service;
 
-import com.sysaid.assignment.domain.Task;
-import com.sysaid.assignment.domain.TaskOfTheDay;
-import com.sysaid.assignment.domain.User;
-import com.sysaid.assignment.mapper.TaskMapper;
-import com.sysaid.assignment.repository.TaskRepository;
+import com.sysaid.assignment.domain.model.Task;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor

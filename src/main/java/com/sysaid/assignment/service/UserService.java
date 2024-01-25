@@ -1,6 +1,6 @@
 package com.sysaid.assignment.service;
 
-import com.sysaid.assignment.domain.User;
+import com.sysaid.assignment.domain.model.User;
 import com.sysaid.assignment.repository.UserRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

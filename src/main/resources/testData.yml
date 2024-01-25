@@ -2,19 +2,19 @@ tasks:
   - task:
       activity: "Do a Home Workout"
       accessibility: 0.9
-      type: "Exercise"
+      type: "exercise"
       participants: 1
       price: 0.0
       link: "https://example.com/home-workout"
       key: "123"
     user: "user1"
-    isCompleted: false
+    isCompleted: true
     isWished: true
     rating: 4
   - task:
       activity: "Read a Book"
       accessibility: 0.7
-      type: "Reading"
+      type: "reading"
       participants: 1
       price: 0.0
       link: "https://example.com/read-book"
@@ -26,15 +26,39 @@ tasks:
   - task:
       activity: "Cook a Healthy Meal"
       accessibility: 0.8
-      type: "Cooking"
+      type: "cooking"
       participants: 2
       price: 10.0
       link: "https://example.com/cook-meal"
       key: "789"
     user: "user1"
-    isCompleted: false
+    isCompleted: true
     isWished: true
     rating: 3
+  - task:
+      activity: "Play Chess"
+      accessibility: 1.8
+      type: "relaxation"
+      participants: 2
+      price: 0.0
+      link: ""
+      key: "779"
+    user: "user1"
+    isCompleted: true
+    isWished: true
+    rating: 8
+  - task:
+      activity: "Start a collection"
+      accessibility: 0.5
+      type: "recreational"
+      participants: 0
+      price: 0.0
+      link: ""
+      key: "657"
+    user: "user1"
+    isCompleted: false
+    isWished: true
+    rating: 5
 
   - task:
       activity: "Learn a New Language"
@@ -45,7 +69,7 @@ tasks:
       link: "https://example.com/learn-language"
       key: "101"
     user: "user2"
-    isCompleted: true
+    isCompleted: false
     isWished: false
     rating: 4
   - task:

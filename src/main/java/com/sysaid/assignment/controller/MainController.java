@@ -1,23 +1,17 @@
 package com.sysaid.assignment.controller;
 
-import com.sysaid.assignment.data.DataLoader;
-import com.sysaid.assignment.domain.TaskDao;
-import com.sysaid.assignment.domain.TaskOfTheDay;
-import com.sysaid.assignment.domain.User;
-import com.sysaid.assignment.service.ITaskService;
+import com.sysaid.assignment.domain.model.TaskDao;
+import com.sysaid.assignment.domain.model.TaskOfTheDay;
+import com.sysaid.assignment.domain.model.User;
 import com.sysaid.assignment.service.InternalStorageService;
 import com.sysaid.assignment.service.UserService;
-import com.sysaid.assignment.strategy.RandomTaskStrategy;
-import com.sysaid.assignment.strategy.RatingTaskStrategy;
-import com.sysaid.assignment.strategy.TaskOfTheDayStrategy;
-import jakarta.annotation.PostConstruct;
+import com.sysaid.assignment.strategy.TaskOfTheDayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -27,18 +21,18 @@ public class MainController {
             "cooking", "relaxation", "music", "busywork");
     private final UserService userService;
     private final InternalStorageService internalStorageService;
-    private final ITaskService taskService;
+    private final TaskOfTheDayService taskOfTheDayService;
 
 
     @GetMapping("/main")
     public String showMainPage(Model model) {
         if (userService.isLoggedIn()) {
             User user = userService.getCurrentUser();
-            if (!isCurrentTaskOfTheDayActual(user)) {
-                getTaskOfTheDayStrategy(user).setTaskOfTheDay();
+            if (taskOfTheDayService.isCurrentTaskOfTheDayExpired(user)) {
+                taskOfTheDayService.getTaskOfTheDayStrategy(user).setTaskOfTheDay();
             }
             List<TaskDao> userTasks = internalStorageService.getActiveUserTasks(user.getName());
-            TaskOfTheDay taskOfTheDay = (TaskOfTheDay) internalStorageService.getTaskById(user.getTaskOfTheDayKey());
+            TaskOfTheDay taskOfTheDay = (TaskOfTheDay) internalStorageService.getTaskById(user.getTaskOfTheDayKey(), user.getName());
             model.addAttribute("username", userService.getCurrentUserName());
             model.addAttribute("isRatingEnabled", user.getUserSettings().isRatingEnabled());
             model.addAttribute("taskOfTheDay", taskOfTheDay);
@@ -88,22 +82,5 @@ public class MainController {
 
     private int getTotalPages(int totalTasks, int pageSize) {
         return (int) Math.ceil((double) totalTasks / pageSize);
-    }
-
-    private TaskOfTheDayStrategy getTaskOfTheDayStrategy(User user) {
-        if (user.getUserSettings().isRatingEnabled()) {
-            return new RatingTaskStrategy(user);
-        }
-        return new RandomTaskStrategy(user, internalStorageService, taskService);
-    }
-
-    private boolean isCurrentTaskOfTheDayActual(User user) {
-        if (user.getTaskOfTheDayKey() == null) {
-            return false;
-        }
-
-        TaskOfTheDay taskOfTheDay = (TaskOfTheDay) internalStorageService.getTaskById(user.getTaskOfTheDayKey());
-        LocalDateTime now = LocalDateTime.now();
-        return now.isAfter(taskOfTheDay.getFetchTime()) && now.isBefore(taskOfTheDay.getRemainingTime());
     }
 }

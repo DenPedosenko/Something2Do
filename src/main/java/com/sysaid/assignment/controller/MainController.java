@@ -14,6 +14,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+/**
+ * Main Controller class.
+ * Handles all requests related to the main page.
+ * The class is annotated with @Controller to indicate that it is a Spring MVC controller.
+ * The class is annotated with @RequiredArgsConstructor to enable constructor-based dependency injection.
+ * The class contains the following methods:
+ * - showMainPage: Shows the main page.
+ * - showWishlist: Shows the wishlist page.
+ * - showCompleted: Shows the completed tasks page.
+ * The class contains the following fields:
+ * - userService: An instance of the UserService class.
+ * - internalStorageService: An instance of the InternalStorageService class.
+ * - taskOfTheDayService: An instance of the TaskOfTheDayService class.
+ * - TASK_TYPES: A list of task types.
+ */
 @Controller
 @RequiredArgsConstructor
 public class MainController {
@@ -23,7 +38,13 @@ public class MainController {
     private final InternalStorageService internalStorageService;
     private final TaskOfTheDayService taskOfTheDayService;
 
-
+    /**
+     * Shows the main page.
+     *
+     * @param model The Spring MVC model for adding attributes.
+     * @return A view name indicating the result of the operation.
+     * If successful, redirects to the main page.
+     */
     @GetMapping("/main")
     public String showMainPage(Model model) {
         if (userService.isLoggedIn()) {
@@ -43,6 +64,12 @@ public class MainController {
         return "redirect:/login";
     }
 
+    /**
+     * Shows the wishlist page.
+     * @param model The Spring MVC model for adding attributes.
+     * @return A view name indicating the result of the operation.
+     * If successful, redirects to the wishlist page with the wished tasks.
+     */
     @GetMapping("/wishlist")
     public String showWishlist(Model model) {
         if (userService.isLoggedIn()) {
@@ -55,6 +82,14 @@ public class MainController {
         return "redirect:/login";
     }
 
+
+    /**
+     * Shows the completed tasks page.
+     * @param model The Spring MVC model for adding attributes.
+     * @param page The current page number.
+     * @return A view name indicating the result of the operation.
+     * If successful, redirects to the completed tasks page with the completed tasks.
+     */
     @GetMapping("/completed")
     public String showCompleted(Model model, @RequestParam(defaultValue = "0") int page) {
         if (userService.isLoggedIn()) {
